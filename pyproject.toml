@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uncurlify"
+version = "0.1.0"
+description = "Generate POSIX curl commands from aiohttp requests"
+authors = [{name = "Your Name", email = "you@example.com"}]
+readme = "README.md"
+python-requires = ">=3.8"
+dependencies = ["aiohttp>=3.9"]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["uncurlify*"]
