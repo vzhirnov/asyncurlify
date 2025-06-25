@@ -3,7 +3,7 @@ import types
 
 import pytest
 
-from to_curl import to_curl
+from asyncurlify import to_curl
 
 
 def _dummy_response(method="GET", url="https://example.com", headers=None):
