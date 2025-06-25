@@ -7,14 +7,14 @@ if TYPE_CHECKING:
 from shlex import quote
 
 
-def to_curl(request: aiohttp.ClientResponse, body=None, compressed=False, verify=True):
+def to_curl(request: 'ClientResponse', body=None, compressed=False, verify=True):
     """Return a cURL command for the given request.
 
     Parameters
     ----------
-    request : aiohttp.ClientResponse
+    request : ClientResponse
         The HTTP response whose request information is to be converted. The
-        value should be an ``aiohttp.ClientResponse`` object.
+        value should be a :class:`aiohttp.ClientResponse` instance.
     body : optional
         Data to send as the request body. Dictionaries are encoded as JSON.
     compressed : bool, optional
