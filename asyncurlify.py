@@ -6,6 +6,8 @@ if TYPE_CHECKING:
 
 from shlex import quote
 
+__all__ = ["to_curl"]
+
 
 def to_curl(request: 'ClientResponse', body=None, compressed=False, verify=True):
     """Return a cURL command for the given request.
