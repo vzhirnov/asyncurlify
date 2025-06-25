@@ -1,5 +1,5 @@
 import json
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from aiohttp import ClientResponse
@@ -7,7 +7,12 @@ if TYPE_CHECKING:
 from shlex import quote
 
 
-def to_curl(request: 'ClientResponse', body=None, compressed=False, verify=True):
+def to_curl(
+    request: "ClientResponse",
+    body: Any | None = None,
+    compressed: bool = False,
+    verify: bool = True,
+) -> str:
     """Return a cURL command for the given request.
 
     Parameters
