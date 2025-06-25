@@ -38,7 +38,7 @@ def to_curl(
     ]
 
     for k, v in sorted(request.request_info.headers.items()):
-        parts += [("-H", "{0}: {1}".format(k, v))]
+        parts.append(("-H", "{0}: {1}".format(k, v)))
 
     if body is not None:
         if isinstance(body, dict):
@@ -46,15 +46,15 @@ def to_curl(
         elif isinstance(body, bytes):
             # fall back to replacing invalid bytes when decoding
             body = body.decode("utf-8", errors="replace")
-        parts += [("-d", body)]
+        parts.append(("-d", body))
 
     if compressed:
-        parts += [("--compressed", None)]
+        parts.append(("--compressed", None))
 
     if not verify:
-        parts += [("--insecure", None)]
+        parts.append(("--insecure", None))
 
-    parts += [(None, str(request.request_info.url))]
+    parts.append((None, str(request.request_info.url)))
 
     flat_parts = []
     for k, v in parts:
