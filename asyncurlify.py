@@ -5,6 +5,25 @@ from shlex import quote
 
 
 def to_curl(request: aiohttp.ClientResponse, body=None, compressed=False, verify=True):
+    """Return a cURL command for the given request.
+
+    Parameters
+    ----------
+    request : aiohttp.ClientResponse
+        The HTTP response whose request information is to be converted. The
+        value should be an ``aiohttp.ClientResponse`` object.
+    body : optional
+        Data to send as the request body. Dictionaries are encoded as JSON.
+    compressed : bool, optional
+        When ``True`` include the ``--compressed`` flag.
+    verify : bool, optional
+        When ``False`` add ``--insecure`` to disable TLS verification.
+
+    Returns
+    -------
+    str
+        The fully assembled cURL command string.
+    """
 
     parts = [
         ("curl", None),
