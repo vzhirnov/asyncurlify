@@ -26,6 +26,9 @@ python -m pip install \
     "pytest>=8.2" \
     "pytest-cov>=5.0"
 
+# ③ ставим сам пакет в режиме разработки
+pip install -e .
+
 echo
 echo "✅  Готово!  Активируйте окружение командой:"
 echo "   source $VENV_NAME/bin/activate"
