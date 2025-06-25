@@ -1,5 +1,5 @@
 import json
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from aiohttp import ClientResponse
@@ -7,7 +7,12 @@ if TYPE_CHECKING:
 from shlex import quote
 
 
-def to_curl(request: 'ClientResponse', body=None, compressed=False, verify=True):
+def to_curl(
+    request: "ClientResponse",
+    body: Any | None = None,
+    compressed: bool = False,
+    verify: bool = True,
+) -> str:
     """Return a cURL command for the given request.
 
     Parameters
@@ -37,19 +42,19 @@ def to_curl(request: 'ClientResponse', body=None, compressed=False, verify=True)
 
     if body is not None:
         if isinstance(body, dict):
-            body = json.dumps(body).encode("utf-8")
-        if isinstance(body, bytes):
+            body = json.dumps(body)
+        elif isinstance(body, bytes):
             # fall back to replacing invalid bytes when decoding
             body = body.decode("utf-8", errors="replace")
-        parts += [("-d", body)]
+        parts.append(("-d", body))
 
     if compressed:
-        parts += [("--compressed", None)]
+        parts.append(("--compressed", None))
 
     if not verify:
-        parts += [("--insecure", None)]
+        parts.append(("--insecure", None))
 
-    parts += [(None, str(request.request_info.url))]
+    parts.append((None, str(request.request_info.url)))
 
     flat_parts = []
     for k, v in parts:
