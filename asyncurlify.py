@@ -19,9 +19,10 @@ def to_curl(request: 'ClientResponse', body=None, compressed=False, verify=True)
 
     if body is not None:
         if isinstance(body, dict):
-            body = json.dumps(body)
-        elif isinstance(body, bytes):
-            body = body.decode("utf-8")
+            body = json.dumps(body).encode("utf-8")
+        if isinstance(body, bytes):
+            # fall back to replacing invalid bytes when decoding
+            body = body.decode("utf-8", errors="replace")
         parts += [("-d", body)]
 
     if compressed:
