@@ -18,7 +18,8 @@ def to_curl(request: aiohttp.ClientResponse, body=None, compressed=False, verify
         if isinstance(body, dict):
             body = json.dumps(body).encode("utf-8")
         if isinstance(body, bytes):
-            body = body.decode("utf-8")
+            # fall back to replacing invalid bytes when decoding
+            body = body.decode("utf-8", errors="replace")
         parts += [("-d", body)]
 
     if compressed:
