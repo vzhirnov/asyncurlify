@@ -38,7 +38,7 @@ def to_curl(
     ]
 
     for k, v in sorted(request.request_info.headers.items()):
-        parts.append(("-H", "{0}: {1}".format(k, v)))
+        parts.append(("-H", f"{k}: {v}"))
 
     if body is not None:
         if isinstance(body, dict):
