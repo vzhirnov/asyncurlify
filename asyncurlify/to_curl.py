@@ -1,7 +1,7 @@
 """
 Light-weight helper that turns an *aiohttp* request into a POSIX-shell-ready
 `curl …` one-liner.  The implementation is intentionally self-contained and
-не требует `aiohttp` в рантайме (импорт только для static-type-checkers).
+does not require `aiohttp` at runtime (import only for static type checkers).
 """
 from __future__ import annotations  # → PEP 563 for Py 3.8/3.9
 
@@ -44,25 +44,25 @@ def to_curl(
     body
         Payload override. ``dict`` → JSON; ``bytes`` → UTF-8 (with fallback).
     compressed
-        • ``True``  — всегда добавлять ``--compressed``.  
-        • ``False`` — никогда.  
-        • ``None``  — автоматически, если исходный запрос имел
-          ``Accept-Encoding: gzip/deflate/br`` (по умолчанию).
+        • ``True``  — always add ``--compressed`` flag.
+        • ``False`` — never add it.
+        • ``None``  — automatically add if original request had
+          ``Accept-Encoding: gzip/deflate/br`` header (default).
     verify
-        ``False`` ⇒ добавить ``--insecure``.
+        ``False`` ⇒ add ``--insecure`` flag.
     redact_headers
-        Заголовки, значение которых будет заменено строкой ``<redacted>``.
+        Headers whose values will be replaced with ``<redacted>`` string.
 
     Notes
     -----
-    * Заголовок ``Content-Length`` не копируется — пусть curl вычислит сам.
-    * Порядок заголовков сохраняется, что позволяет корректно воспроизводить
-      HMAC-подписанные запросы (AWS Sig v4 и т.п.).
-    * Если метод = ``GET``/``HEAD`` и передан ``body`` — добавляется ``-G``.
+    * ``Content-Length`` header is not copied — let curl compute it.
+    * Header order is preserved, which allows correct reproduction of
+      HMAC-signed requests (AWS Sig v4, etc.).
+    * If method is ``GET``/``HEAD`` and ``body`` is provided, ``-G`` flag is added.
     """
     rq = response.request_info
     method = rq.method.upper()
-    hdrs = list(rq.headers.items())  # CIMultiDict сохраняет порядок
+    hdrs = list(rq.headers.items())  # CIMultiDict preserves order
 
     parts: list[tuple[str | None, str | None]] = [
         ("curl", None),
@@ -72,7 +72,7 @@ def to_curl(
     # -------- headers --------
     for name, value in hdrs:
         if name.lower() == "content-length":
-            continue  # несовпадение длины опаснее, чем отсутствие заголовка
+            continue  # length mismatch is more dangerous than missing header
         if name in redact_headers:
             value = "<redacted>"
         parts.append(("-H", f"{name}: {value}"))
